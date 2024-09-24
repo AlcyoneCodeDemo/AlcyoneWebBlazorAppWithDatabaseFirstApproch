@@ -1,0 +1,366 @@
+﻿@page "/IndexPage"
+@layout IndexLayout
+@inject IJSRuntime JSRuntime
+@using DataLayer.DataModel
+@using System.Net.Http.Headers
+@using BlazorClient.Services
+@inject HttpClient HttpClient
+
+<!-- BEGIN: Body-->
+<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+
+    <!-- BEGIN: Content-->
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- Dashboard Ecommerce Starts -->
+                <section id="dashboard-ecommerce">
+                    <div class="row match-height">
+                        <!-- Medal Card -->
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <!-- User Card -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="user-avatar-section">
+                                        <div class="d-flex align-items-center flex-column">
+                                            <img class="img-fluid rounded mt-2 mb-2" src="app-assets/images/portrait/small/avatar-s-1.jpg" height="110" width="110" alt="User avatar" />
+                                            <div class="user-info text-center">
+                                                <h4>@user.Name</h4>
+                                                <span class="badge bg-light-secondary">@user.Role</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="info-container">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Emp. ID:</span>
+                                                <span>@user.EmpId</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Name:</span>
+                                                <span>@user.Name</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Email:</span>
+                                                <span>@user.Email</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Status:</span>
+                                                <span class="badge bg-light-success">@user.Status</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Role:</span>
+                                                <span>@user.Role</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Contact:</span>
+                                                <span>@user.Contact</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Emergency Contact:</span>
+                                                <span>@user.EmergencyContact</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Blood Group:</span>
+                                                <span>@user.BloodGroup</span>
+                                            </li>
+
+                                        </ul>
+                                        <div class="d-flex justify-content-center pt-2">
+                                            <a href="Profile" class="btn btn-outline-info suspend-user">View Full Profile</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /User Card -->
+                        </div>
+                        <!--/ Medal Card -->
+                        <!-- Activity Timeline -->
+                        <div class="col-lg-4 col-md-6 col-12">
+
+                            <div class="card">
+                                <h4 class="card-header">Today's Activity</h4>
+                                <div class="card-body pt-1">
+                                    <ul class="timeline ms-50">
+                                        <li class="timeline-item">
+                                            <span class="timeline-point timeline-point-success timeline-point-indicator"></span>
+                                            <div class="timeline-event">
+                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                    <h6>Punch In at</h6>
+                                                </div>
+                                                <p>10:00 AM</p>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-item">
+                                            <span class="timeline-point timeline-point-danger timeline-point-indicator"></span>
+                                            <div class="timeline-event">
+                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                    <h6>Punch Out at</h6>
+                                                </div>
+                                                <p>1:00 PM</p>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-item">
+                                            <span class="timeline-point timeline-point-success timeline-point-indicator"></span>
+                                            <div class="timeline-event">
+                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                    <h6>Punch In at</h6>
+                                                </div>
+                                                <p>2:00 PM</p>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-item">
+                                            <span class="timeline-point timeline-point-danger timeline-point-indicator"></span>
+                                            <div class="timeline-event">
+                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                    <h6>Punch Out at</h6>
+                                                </div>
+                                                <p>7:00 PM</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /Activity Timeline -->
+                        <!-- Timesheet Card -->
+                        <div class="col-lg-4 col-md-6 col-12">
+
+                            <div class="row  match-height">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h4 class="card-title">Timesheet <span class="badge bg-light-info">@currentDate</span> </h4>
+                                            <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div id="goal-overview-radial-bar-chart" class="my-2"></div>
+                                            <div class="row border-top text-center mx-0">
+                                                <div class="col-12 border-end py-1">
+                                                    <p class="card-text text-muted mb-0">Punch In at</p>
+                                                    <h3 class="fw-bolder mb-0">Wed, 11th Dec 2021 10.00 AM</h3>
+                                                </div>
+                                                <div class="col-6 border-end py-1">
+                                                    <p class="card-text text-muted mb-0">Break</p>
+                                                    <h3 class="fw-bolder mb-0">1.45 hrs</h3>
+                                                </div>
+                                                <div class="col-6 py-1">
+                                                    <p class="card-text text-muted mb-0">Over Time</p>
+                                                    <h3 class="fw-bolder mb-0">2.5 hrs</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Bar Chart - Orders -->
+                                <div class="col-lg-6 col-md-3 col-6">
+                                    <div class="card">
+                                        <div class="card-body pb-50">
+                                            <h6>Leave This Month</h6>
+                                            <h2 class="fw-bolder mb-1">1</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ Bar Chart - Orders -->
+                                <!-- Line Chart - Profit -->
+                                <div class="col-lg-6 col-md-3 col-6">
+                                    <div class="card card-tiny-line-stats">
+                                        <div class="card-body pb-50">
+                                            <h6>Leave Balance</h6>
+                                            <h2 class="fw-bolder mb-1">2</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ Line Chart - Profit -->
+                            </div>
+                        </div>
+                        <!--/ Timesheet Card -->
+
+
+
+                    </div>
+                    <div class="row match-height">
+                        <!-- Column Chart Starts -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="
+            card-header
+            d-flex
+            flex-md-row flex-column
+            justify-content-md-between justify-content-start
+            align-items-md-center align-items-start
+          ">
+                                    <h4 class="card-title">Attendance</h4>
+                                    <div class="d-flex align-items-center mt-md-0 mt-1">
+                                        <input type="text" id="fp-human-friendly" class="form-control flatpickr-human-friendly" placeholder="October 14, 2021" />
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" id="table-hover-row">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Punch In</th>
+                                                                <th>Punch Out</th>
+                                                                <th>Production</th>
+                                                                <th>Break</th>
+                                                                <th>Overtime</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">07 Dec. 2021</span>
+                                                                </td>
+                                                                <td>10:00 AM</td>
+                                                                <td>09:00 PM</td>
+                                                                <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                                <td>1 hrs</td>
+                                                                <td>0 hrs</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">06 Dec. 2021</span>
+                                                                </td>
+                                                                <td>10:00 AM</td>
+                                                                <td>11:00 PM</td>
+                                                                <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                                <td>1 hrs</td>
+                                                                <td>2 hrs</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">05 Dec. 2021</span>
+                                                                </td>
+                                                                <td>NA</td>
+                                                                <td>NA</td>
+                                                                <td><span class="badge rounded-pill badge-light-warning me-1">Week Off</span></td>
+                                                                <td>0 hrs</td>
+                                                                <td>0 hrs</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">04 Dec. 2021</span>
+                                                                </td>
+                                                                <td>NA</td>
+                                                                <td>NA</td>
+                                                                <td><span class="badge rounded-pill badge-light-warning me-1">Week Off</span></td>
+                                                                <td>0 hrs</td>
+                                                                <td>0 hrs</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">03 Dec. 2021</span>
+                                                                </td>
+                                                                <td>10:00 AM</td>
+                                                                <td>09:00 PM</td>
+                                                                <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                                <td>1 hrs</td>
+                                                                <td>0 hrs</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">02 Dec. 2021</span>
+                                                                </td>
+                                                                <td>10:00 AM</td>
+                                                                <td>09:00 PM</td>
+                                                                <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                                <td>1 hrs</td>
+                                                                <td>0 hrs</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="fw-bold">01 Dec. 2021</span>
+                                                                </td>
+                                                                <td>10:00 AM</td>
+                                                                <td>09:00 PM</td>
+                                                                <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                                <td>1 hrs</td>
+                                                                <td>0 hrs</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Column Chart Ends -->
+                    </div>
+
+                </section>
+                <!-- Dashboard Ecommerce ends -->
+
+            </div>
+        </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+</body>
+<!-- END: Body-->
+
+
+@code {
+    private UserData? user;
+    private bool isLoading = true;
+    private int currentDate;
+
+    protected override async Task OnInitializedAsync()
+    {
+         currentDate = DateTime.Now.Date;
+        await GetUserInformations();
+    }
+
+    private async Task GetUserInformations()
+    {
+        try
+        {
+            var token = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("User is not authenticated.");
+            }
+
+            // Use HttpClient for making requests
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "api/Users/GetLoggedInUser");
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await HttpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
+            {
+                user = await response.Content.ReadFromJsonAsync<UserData>();
+            }
+            else
+            {
+                // Log the error response or handle it accordingly
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {error}");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+         
+    }
+}

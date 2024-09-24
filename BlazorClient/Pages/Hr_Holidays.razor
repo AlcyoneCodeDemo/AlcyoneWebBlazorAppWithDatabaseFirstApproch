@@ -1,0 +1,145 @@
+﻿@page "/Hr_Holidays"
+@layout IndexLayout
+@inject IJSRuntime JSRuntime
+@using DataLayer.Models
+@using System.Net.Http.Headers
+@inject HttpClient HttpClient
+
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Body-->
+
+<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+
+    <!-- BEGIN: Content-->
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-body">
+                <!-- Dashboard Ecommerce Starts -->
+                <section id="dashboard-ecommerce">
+
+                    <div class="row match-height">
+                        <!-- Column Chart Starts -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Holidays 2022</h4>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"><span data-feather="plus"></span> Add</button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-body">
+                                            <div class="row" id="table-hover-row">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped custom-table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Title</th>
+                                                                    <th>Holiday Date</th>
+                                                                    <th>Day</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (isLoading)
+                                                                {
+                                                                    <tr>
+                                                                        <td colspan="5" class="text-center">Loading...</td>
+                                                                    </tr>
+                                                                }
+                                                                else if (holidaysData.Any())
+                                                                {
+                                                                    @foreach (var holiday in holidaysData)
+                                                                    {
+                                                                        <tr class="holiday-completed">
+                                                                            <td>@holiday.holiday_id</td>
+                                                                            <td>@holiday.title</td>
+                                                                            <td>@holiday.holiday_date</td>
+                                                                            <td>@holiday.day</td>
+                                                                            <td>
+                                                                                <a href="#editHoliday" class="btn btn-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">
+                                                                                    <span data-feather="edit-2"></span>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+                                                                        <td colspan="5" class="text-center">No holidays found.</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- Offcanvas form remains unchanged -->
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column Chart Ends -->
+                  </section>
+            </div>
+            <!-- Dashboard Ecommerce ends -->
+
+        </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+ 
+    </body>
+<!-- END: Body-->
+</html>
+
+@code {
+    private List<Holiday> holidaysData = new List<Holiday>();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetHolidays();
+    }
+
+    protected async Task GetHolidays()
+    {
+        try
+        {
+            var token = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("User is not authenticated.");
+            }
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "api/Users/GetHolidays");
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await HttpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
+            {
+                holidaysData = await response.Content.ReadFromJsonAsync<List<Holiday>>();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

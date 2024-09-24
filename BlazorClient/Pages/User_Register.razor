@@ -1,0 +1,158 @@
+﻿@page "/User_Register"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using DataLayer.DataModel
+
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<head>
+    <!-- Your head content here -->
+</head>
+<body>
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row"></div>
+            <div class="content-body">
+                <div class="auth-wrapper auth-basic px-2">
+                    <div class="auth-inner my-2">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <a class="brand-logo" href="#"><img src="app-assets/images/logo/logo.png" class="" alt="Alcyone"></a>
+                                <h4 class="card-title mb-1">Adventure starts here 🚀</h4>
+                                <p class="card-text mb-2">Make your app management easy and fun!</p>
+
+                                <!-- Loader -->
+                                @if (isLoading)
+                                {
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                }
+
+                                <EditForm Model="@registerModel" OnValidSubmit="@HandleRegister">
+                                    <DataAnnotationsValidator />
+                                    @*<ValidationSummary />*@
+
+                                    <div class="mb-1">
+                                        <label for="register-username" class="form-label">Username</label>
+                                        <InputText class="form-control" id="register-username" @bind-Value="registerModel.Username" placeholder="Username" aria-describedby="register-username" />
+                                        <ValidationMessage For="@(() => registerModel.Username)" />
+                                    </div>
+
+                                    <div class="mb-1">
+                                        <label for="register-email" class="form-label">Email</label>
+                                        <InputText class="form-control" id="register-email" @bind-Value="registerModel.Email" placeholder="john@example.com" aria-describedby="register-email" />
+                                        <ValidationMessage For="@(() => registerModel.Email)" />
+                                    </div>
+
+                                    <div class="mb-1">
+                                        <label for="register-password" class="form-label">Password</label>
+                                        @*<div class="input-group input-group-merge form-password-toggle">*@
+                                            <InputText type="password" class="form-control form-control-merge" id="register-password" @bind-Value="registerModel.Password" placeholder="Password" aria-describedby="register-password" />
+                                            @*<span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>*@
+                                            <ValidationMessage For="@(() => registerModel.Password)" />
+                                        @*</div>*@
+                                    </div>
+
+                                    <div class="mb-1">
+                                        <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                                        @*<div class="input-group input-group-merge form-password-toggle">*@
+                                            <InputText type="password" class="form-control form-control-merge" id="register-confirm-password" @bind-Value="registerModel.ConfirmPassword" placeholder="Password" aria-describedby="register-confirm-password" />
+                                            @*<span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>*@
+                                            <ValidationMessage For="@(() => registerModel.ConfirmPassword)" />
+                                        @*</div>*@
+                                    </div>
+
+                                    <div class="mb-1">
+                                        <div class="form-check">
+                                            <InputCheckbox class="form-check-input" id="register-privacy-policy" @bind-Value="registerModel.AgreedToPrivacyPolicy" />
+                                            <label class="form-check-label" for="register-privacy-policy">I agree to <a href="#">privacy policy & terms</a></label>
+                                            <ValidationMessage For="@(() => registerModel.AgreedToPrivacyPolicy)" />
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Sign up</button>
+                                </EditForm>
+
+                                @if (!string.IsNullOrEmpty(errorMessage))
+                                {
+                                    <div class="alert alert-danger mt-2">
+                                        @errorMessage
+                                    </div>
+                                }
+
+                                <p class="text-center mt-2">
+                                    <span>Already have an account?</span>
+                                    <NavLink href="login">
+                                        <span>Sign in instead</span>
+                                    </NavLink>
+                                </p>
+                                <div class="divider my-2">
+                                    <div class="divider-text">or</div>
+                                </div>
+                                <div class="auth-footer-btn d-flex justify-content-center">
+                                    <!-- Social media buttons here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@code {
+    private RegisterViewModel registerModel = new RegisterViewModel();
+    private string errorMessage;
+    private bool isLoading = false; // Loader flag
+
+    private async Task HandleRegister()
+    {
+        try
+        {    isLoading = true; // Show loader
+            var response = await Http.PostAsJsonAsync("api/Account/Register", registerModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+               // Assuming response contains the user info, e.g., username and email
+                var registeredUser = await response.Content.ReadFromJsonAsync<RegisterResponseModel>();
+
+                // Store user information in localStorage
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userName", registeredUser.UserName);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userEmail", registeredUser.Email);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", registeredUser.Token);
+            
+                // Mark user as authenticated
+                var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+                //authStateProvider.MarkUserAsAuthenticated(registeredUser.Username, registeredUser.Email);
+                authStateProvider.MarkUserAsAuthenticated(registeredUser.UserName);
+                // Redirect to the homepage
+                Navigation.NavigateTo("/IndexPage");
+            }
+            else
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                // Handle validation errors or other custom messages
+                errorMessage = responseBody.Contains("Already have an account.")
+                    ? "Already have an account"
+                    : "Registration failed. Please check the details and try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false; // Hide loader
+        }
+    }
+}

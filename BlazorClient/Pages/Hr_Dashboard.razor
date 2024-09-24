@@ -1,0 +1,362 @@
+﻿@page "/dashboard"
+@layout MainMenu
+
+<!-- BEGIN: Body-->
+<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+
+    <!-- BEGIN: Content-->
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <section id="hr_dashboard">
+                    <div class="row match-height">
+                        <div class="col-lg-8 col-md-7 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex flex-md-row flex-column justify-content-md-between justify-content-start align-items-md-center align-items-start">
+                                    <h4 class="card-title">Attendance <span class="badge badge-light-dark me-1 ">8 Dec. 2021</span></h4>
+                                    <div class="d-flex align-items-center mt-md-0 mt-1">
+                                        <input type="text" id="fp-human-friendly" class="form-control flatpickr-human-friendly" placeholder="October 14, 2021" />
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Employee</th>
+                                                    <th>Punch In</th>
+                                                    <th>Punch Out</th>
+                                                    <th>Production</th>
+                                                    <th>Break</th>
+                                                    <th>Overtime</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/12.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="#" class="user_name text-truncate text-body" data-bs-toggle="offcanvas" data-bs-target="#manualPunch" aria-controls="manualPunch"><span class="fw-bolder">Ravi Kumar Mali</span></a>
+                                                                <small class="emp_post text-muted">ravi.mali@alcyone.com</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/8.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Sudhir Sharma</span></a><small class="emp_post text-muted">sudhir.sharma@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/6.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Rajesh Gour</span></a><small class="emp_post text-muted">rajesh.gour@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/4.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Chetan Joshi</span></a><small class="emp_post text-muted">chetan.joshi@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/8.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Ayaz Shaikh</span></a><small class="emp_post text-muted">ayaz.shaikh@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/12.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Ravi Kumar Mali</span></a><small class="emp_post text-muted">ravi.mali@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/8.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Sudhir Sharma</span></a><small class="emp_post text-muted">sudhir.sharma@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/6.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Rajesh Gour</span></a><small class="emp_post text-muted">rajesh.gour@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/4.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Chetan Joshi</span></a><small class="emp_post text-muted">chetan.joshi@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar  me-1"><img src="app-assets/images/avatars/8.png" alt="Avatar" width="32" height="32"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><a href="profile.html" class="user_name text-truncate text-body"><span class="fw-bolder">Ayaz Shaikh</span></a><small class="emp_post text-muted">ayaz.shaikh@alcyone.com</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>10:00 AM</td>
+                                                    <td>09:00 PM</td>
+                                                    <td><span class="badge rounded-pill badge-light-primary me-1">8 hrs</span></td>
+                                                    <td>1 hrs</td>
+                                                    <td>0 hrs</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="manualPunch" aria-labelledby="manualPunchLabel">
+                                <div class="offcanvas-header">
+                                    <h5 id="manualPunchLabel" class="offcanvas-title">Manual Punch for [Name]</h5>
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body mx-0 flex-grow-0">
+                                    <form class="form form-vertical">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="">Punch Date</label>
+                                                    <input type="date" id="" class="form-control" name="" value="8 Dec. 2021" placeholder="">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="">Punch In</label>
+                                                    <input type="time" id="" class="form-control" name="" placeholder="Day In Time">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="">Punch Out</label>
+                                                    <input type="time" id="" class="form-control" name="" placeholder="Day Off Time">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <button type="button" class="btn btn-primary mb-1 d-grid w-100">Save</button>
+                                    <button type="button" class="btn btn-outline-danger d-grid w-100">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Employee Task Card -->
+                        <div class="col-lg-4 col-md-5 col-12">
+                            <div class="card card-congratulations">
+                                <div class="card-body text-center">
+                                    <img src="app-assets/images/elements/decore-left.png" class="congratulations-img-left" alt="card-img-left">
+                                    <img src="app-assets/images/elements/decore-right.png" class="congratulations-img-right" alt="card-img-right">
+                                    <div class="avatar avatar-xl bg-primary shadow">
+                                        <div class="avatar-content">
+                                            <span data-feather="star"></span>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <h1 class="mb-1 text-white">Pankaj's Birthday Today!</h1>
+                                        <p class="card-text m-auto w-75">
+                                            Let's wish Pankaj for such a wonderful day!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-employee-task">
+                                <div class="card-header">
+                                    <h4 class="card-title">Employee on Leave</h4>
+                                    <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="employee-task d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row">
+                                            <div class="avatar me-75">
+                                                <img src="app-assets/images/portrait/small/avatar-s-9.jpg" class="rounded" width="42" height="42" alt="Avatar" />
+                                            </div>
+                                            <div class="my-auto">
+                                                <h6 class="mb-0">Ryan Harrington</h6>
+                                                <small>iOS Developer</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-75">9hr 20m</small>
+                                            <div class="employee-task-chart-primary-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="employee-task d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row">
+                                            <div class="avatar me-75">
+                                                <img src="app-assets/images/portrait/small/avatar-s-20.jpg" class="rounded" width="42" height="42" alt="Avatar" />
+                                            </div>
+                                            <div class="my-auto">
+                                                <h6 class="mb-0">Louisa Norton</h6>
+                                                <small>UI Designer</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-75">4hr 17m</small>
+                                            <div class="employee-task-chart-danger"></div>
+                                        </div>
+                                    </div>
+                                    <div class="employee-task d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row">
+                                            <div class="avatar me-75">
+                                                <img src="app-assets/images/portrait/small/avatar-s-1.jpg" class="rounded" width="42" height="42" alt="Avatar" />
+                                            </div>
+                                            <div class="my-auto">
+                                                <h6 class="mb-0">Jayden Duncan</h6>
+                                                <small>Java Developer</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-75">12hr 8m</small>
+                                            <div class="employee-task-chart-success"></div>
+                                        </div>
+                                    </div>
+                                    <div class="employee-task d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row">
+                                            <div class="avatar me-75">
+                                                <img src="app-assets/images/portrait/small/avatar-s-20.jpg" class="rounded" width="42" height="42" alt="Avatar" />
+                                            </div>
+                                            <div class="my-auto">
+                                                <h6 class="mb-0">Cynthia Howell</h6>
+                                                <small>Anguler Developer</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-75">3hr 19m</small>
+                                            <div class="employee-task-chart-secondary"></div>
+                                        </div>
+                                    </div>
+                                    <div class="employee-task d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row">
+                                            <div class="avatar me-75">
+                                                <img src="app-assets/images/portrait/small/avatar-s-16.jpg" class="rounded" width="42" height="42" alt="Avatar" />
+                                            </div>
+                                            <div class="my-auto">
+                                                <h6 class="mb-0">Helena Payne</h6>
+                                                <small>Marketing</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-75">9hr 50m</small>
+                                            <div class="employee-task-chart-warning"></div>
+                                        </div>
+                                    </div>
+                                    <div class="employee-task d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row">
+                                            <div class="avatar me-75">
+                                                <img src="app-assets/images/portrait/small/avatar-s-13.jpg" class="rounded" width="42" height="42" alt="Avatar" />
+                                            </div>
+                                            <div class="my-auto">
+                                                <h6 class="mb-0">Troy Jensen</h6>
+                                                <small>iOS Developer</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-75">4hr 48m</small>
+                                            <div class="employee-task-chart-primary-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Employee Task Card -->
+
+                    </div>
+                    <div class="row match-height">
+
+
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+</body>
+<!-- END: Body-->

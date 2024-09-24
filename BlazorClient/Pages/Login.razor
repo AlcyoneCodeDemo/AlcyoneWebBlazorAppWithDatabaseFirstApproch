@@ -1,0 +1,129 @@
+﻿@page "/login"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+@using DataLayer.DataModel
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<body>
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row"></div>
+            <div class="content-body">
+                <div class="auth-wrapper auth-basic px-2">
+                    <div class="auth-inner my-2">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <a class="brand-logo" href="#"><img src="app-assets/images/logo/logo.png" class="" alt="Alcyone"></a>
+                                <h4 class="card-title mb-1">Blazor !</h4>
+                                <p class="card-text mb-2">Please sign in to your account.</p>
+
+                                <!-- Loader -->
+                                @if (isLoading)
+                                {
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                }
+
+                                <!-- Login Form -->
+                                <EditForm Model="@loginModel" OnValidSubmit="HandleLogin" class="auth-login-form mt-2">
+                                    <DataAnnotationsValidator />
+
+                                    <div class="mb-1">
+                                        <label for="login-email" class="form-label">Email</label>
+                                        <InputText id="login-email" class="form-control" @bind-Value="loginModel.Email" placeholder="john@example.com" aria-describedby="login-email" />
+                                        <ValidationMessage For="@(() => loginModel.Email)" />
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="login-password" class="form-label">Password</label>
+                                        <InputText id="login-password" type="password" class="form-control" @bind-Value="loginModel.Password" placeholder="******" aria-describedby="login-password" />
+                                        <ValidationMessage For="@(() => loginModel.Password)" />
+                                    </div>
+                                    <div class="text-danger">
+                                        @loginErrorMessage
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">Sign in</button>
+                                </EditForm>
+
+                                <p class="text-center mt-2">
+                                    <span>Don't have an account?</span>
+                                    <NavLink href="User_Register">
+                                        <span>Sign up instead</span>
+                                    </NavLink>
+                                </p>
+                                <div class="divider my-2">
+                                    <div class="divider-text">or</div>
+                                </div>
+                                <div class="auth-footer-btn d-flex justify-content-center">
+                                    <!-- Social media buttons here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@code {
+    private LoginViewModel loginModel = new LoginViewModel();
+    private string loginErrorMessage = string.Empty;
+    private bool isLoading = false; // Loader flag
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        loginErrorMessage = string.Empty;
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/Account/Login", loginModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Login successfully");
+                var user = await response.Content.ReadFromJsonAsync<LoginResponseModel>();
+
+                // Store user information and token in localStorage
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userName", user.UserName);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userEmail", user.Email);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", user.Token); // Store token
+
+                // Mark user as authenticated
+                var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+                authStateProvider.MarkUserAsAuthenticated(user.Email);
+
+                Navigation.NavigateTo("/IndexPage");
+            }
+            else
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    loginErrorMessage = "User not found. Please check your credentials.";
+                }
+                else
+                {
+                    loginErrorMessage = "Login failed. Please try again.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            loginErrorMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

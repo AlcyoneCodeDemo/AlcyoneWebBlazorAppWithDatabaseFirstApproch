@@ -1,0 +1,647 @@
+﻿@page "/Profile"
+@layout IndexLayout
+@inject IJSRuntime JSRuntime
+@using DataLayer.DataModel
+@using DataLayer.Models
+@using System.Net.Http.Headers
+@using BlazorClient.Services
+@using System.Text.Json
+@using System.Text
+@inject HttpClient HttpClient
+
+
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+
+<!-- BEGIN: Body-->
+<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+
+    <!-- BEGIN: Content-->
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- Dashboard Ecommerce Starts -->
+                <section id="dashboard-ecommerce">
+                    <div class="row match-height">
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <!-- User Card -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="user-avatar-section">
+                                        <div class="d-flex align-items-center flex-column">
+                                            <img class="img-fluid rounded mt-2 mb-2" src="app-assets/images/portrait/small/avatar-s-1.jpg" height="110" width="110" alt="User avatar" />
+                                            <div class="user-info text-center">
+                                                <h4>@user.Name</h4>
+                                                <span class="badge bg-light-secondary">@user.Role</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div class="info-container">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Emp. ID:</span>
+                                                <span>@user.EmpId</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Name:</span>
+                                                <span>@user.Name</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Email:</span>
+                                                <span>@user.Email</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Status:</span>
+                                                <span class="badge bg-light-success">@user.Status</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Role:</span>
+                                                <span>@user.Role</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Contact:</span>
+                                                <span>@user.Contact</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Emergency Contact:</span>
+                                                <span>@user.EmergencyContact</span>
+                                            </li>
+                                            <li class="mb-75">
+                                                <span class="fw-bolder me-25">Blood Group:</span>
+                                                <span>@user.BloodGroup</span>
+                                            </li>
+
+                                        </ul>
+                                        <div class="d-flex justify-content-center pt-2">
+                                            <a href="javascript:;" class="btn btn-primary me-1" data-bs-target="#editUser" data-bs-toggle="modal">Edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /User Card -->
+                        </div>
+                        <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+                            <!-- User Pills -->
+                            <ul class="nav nav-pills mb-2">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="profile-tab-fill" data-bs-toggle="pill" href="#profile-fill" aria-expanded="true">
+                                        <i data-feather="user" class="font-medium-3 me-50"></i>
+                                        <span class="fw-bold">Profile</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="bank-tab-fill" data-bs-toggle="pill" href="#bank-fill" aria-expanded="false">
+                                        <i data-feather="credit-card" class="font-medium-3 me-50"></i>
+                                        <span class="fw-bold">Bank Info</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="leaves-tab-fill" data-bs-toggle="pill" href="#leaves-fill" aria-expanded="false">
+                                        <i data-feather="sun" class="font-medium-3 me-50"></i>
+                                        <span class="fw-bold">Leaves</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="education-tab-fill" data-bs-toggle="pill" href="#education-fill" aria-expanded="false">
+                                        <i data-feather="bookmark" class="font-medium-3 me-50"></i>
+                                        <span class="fw-bold">Education</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " id="experience-tab-fill" data-bs-toggle="pill" href="#experience-fill" aria-expanded="false">
+                                        <i data-feather="award" class="font-medium-3 me-50"></i>
+                                        <span class="fw-bold">Experience</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--/ User Pills -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="profile-fill" role="tabpanel" aria-labelledby="profile-tab-fill" aria-expanded="true">
+
+                                    <!-- Personal Informations -->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-50">Personal Informations</h4>
+                                            <button class="btn btn-primary btn-sm edit-address" type="button" data-bs-toggle="modal" data-bs-target="#addNewAddressModal">
+                                        <span data-feather="edit-2"></span>
+                                    </button>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-xl-7 col-12">
+                                                    <dl class="row mb-0">
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Nationality:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Country</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Religion:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Religion</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Marital status:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Marital_status</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Address:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Address</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-xl-5 col-12">
+                                                    <dl class="row mb-0">
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Contact:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Contact</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Country:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Country</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">State:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.State</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Zipcode:</dt>
+                                                        <dd class="col-sm-8 mb-1">@user.Zipcode</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/ Personal Informations -->
+                                    <!-- Emergency Contact -->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-50">Emergency Contact</h4>
+                                            <button class="btn btn-primary btn-sm edit-address" type="button" data-bs-toggle="modal" data-bs-target="#addNewAddressModal"><span data-feather="edit-2"></span></button>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-xl-6 col-12">
+                                                    <h6 class="pb-1 text-secondary">Primary</h6>
+                                                    <dl class="row mb-0">
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Name:</dt>
+                                                        <dd class="col-sm-8 mb-1">Nidhi Sharma</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Relationship:</dt>
+                                                        <dd class="col-sm-8 mb-1">Wife</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Phone:</dt>
+                                                        <dd class="col-sm-8 mb-1"> 9111023020</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-xl-6 col-12">
+                                                    <h6 class="pb-1 text-secondary">Secondary</h6>
+                                                    <dl class="row mb-0">
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Name:</dt>
+                                                        <dd class="col-sm-8 mb-1">Chetan Joshi</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Relationship:</dt>
+                                                        <dd class="col-sm-8 mb-1">Brother</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Phone:</dt>
+                                                        <dd class="col-sm-8 mb-1"> 8109286754</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/ Emergency Contact -->
+                                </div>
+                                <div class="tab-pane" id="bank-fill" role="tabpanel" aria-labelledby="bank-tab-fill" aria-expanded="false">
+                                    <!-- Bank  Informations -->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-50">Bank Informations</h4>
+                                            <button class="btn btn-primary btn-sm edit-address" type="button" data-bs-toggle="modal" data-bs-target="#addNewAddressModal">
+                                        <span data-feather="edit-2"></span>
+                                    </button>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-xl-12 col-12">
+                                                    <dl class="row mb-0">
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Bank name:</dt>
+                                                        <dd class="col-sm-8 mb-1">HDFC Bank</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">Bank account No.:</dt>
+                                                        <dd class="col-sm-8 mb-1">159843014641</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">IFSC Code:</dt>
+                                                        <dd class="col-sm-8 mb-1">HDFC07710</dd>
+
+                                                        <dt class="col-sm-4 fw-bolder mb-1">PAN No:</dt>
+                                                        <dd class="col-sm-8 mb-1">TC000Y56</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/ Bank Informations -->
+                                </div>
+                                <div class="tab-pane" id="leaves-fill" role="tabpanel" aria-labelledby="leaves-tab-fill" aria-expanded="false">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-6">
+                                            <div class="card">
+                                                <div class="card-body pb-50">
+                                                    <h6>Annual Leave</h6>
+                                                    <h2 class="fw-bolder mb-1">12</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-6">
+                                            <div class="card">
+                                                <div class="card-body pb-50">
+                                                    <h6>Medical Leave</h6>
+                                                    <h2 class="fw-bolder mb-1">4</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-6">
+                                            <div class="card">
+                                                <div class="card-body pb-50">
+                                                    <h6>Other Leave</h6>
+                                                    <h2 class="fw-bolder mb-1">3</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-6">
+                                            <div class="card">
+                                                <div class="card-body pb-50">
+                                                    <h6>Remaining Leave</h6>
+                                                    <h2 class="fw-bolder mb-1">5</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-50">Leaves</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Leave Type</th>
+                                                            <th>From</th>
+                                                            <th>To</th>
+                                                            <th># Days</th>
+                                                            <th>Status</th>
+                                                            <th>Approved by</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <span class="fw-bold">Casual Leave</span>
+                                                            </td>
+                                                            <td>02 Dec. 2021</td>
+                                                            <td>02 Dec. 2021</td>
+                                                            <td>1 Day</td>
+                                                            <td><span class="badge rounded-pill badge-light-warning me-1">Pending</span></td>
+                                                            <td>--</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <span class="fw-bold">Medical Leave</span>
+                                                            </td>
+                                                            <td>21 Nov. 2021</td>
+                                                            <td>23 Nov. 2021</td>
+                                                            <td>3 Days</td>
+                                                            <td><span class="badge rounded-pill badge-light-success me-1">Approved</span></td>
+                                                            <td>Team Lead</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <span class="fw-bold">Casual Leave</span>
+                                                            </td>
+                                                            <td>18 Nov. 2021</td>
+                                                            <td>18 Nov. 2021</td>
+                                                            <td>1 Day</td>
+                                                            <td><span class="badge rounded-pill badge-light-danger me-1">Declined</span></td>
+                                                            <td>HR</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <span class="fw-bold">Casual Leave</span>
+                                                            </td>
+                                                            <td>02 Dec. 2021</td>
+                                                            <td>02 Dec. 2021</td>
+                                                            <td>1 Day</td>
+                                                            <td><span class="badge rounded-pill badge-light-warning me-1">Pending</span></td>
+                                                            <td>--</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="education-fill" role="tabpanel" aria-labelledby="education-tab-fill" aria-expanded="false">
+                                    <div class="card">
+                                        <h4 class="card-header">Education Informations</h4>
+                                        <div class="card-body pt-1">
+                                            <ul class="timeline ms-50">
+                                                <li class="timeline-item">
+                                                    <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                            <h6>International College of Arts and Science (UG)</h6>
+                                                            <span class="timeline-event-time me-1">2000-2003</span>
+                                                        </div>
+                                                        <p>Bsc Computer Science</p>
+                                                    </div>
+                                                </li>
+                                                <li class="timeline-item">
+                                                    <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                            <h6>International College of Arts and Science (PG)</h6>
+                                                            <span class="timeline-event-time me-1">2000-2003</span>
+                                                        </div>
+                                                        <p>Msc Computer Science</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="experience-fill" role="tabpanel" aria-labelledby="experience-tab-fill" aria-expanded="false">
+                                    <div class="card">
+                                        <h4 class="card-header">Experience Informations</h4>
+                                        <div class="card-body pt-1">
+                                            <ul class="timeline ms-50">
+                                                <li class="timeline-item">
+                                                    <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                            <h6>Lead Software Developer</h6>
+                                                            <span class="timeline-event-time me-1">(5 years 2 months)</span>
+                                                        </div>
+                                                        <p>Jan 2016 - Present</p>
+                                                    </div>
+                                                </li>
+                                                <li class="timeline-item">
+                                                    <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                            <h6>Software developer</h6>
+                                                            <span class="timeline-event-time me-1">(1 years 3 months)</span>
+                                                        </div>
+                                                        <p>Oct 2014 - Jan 2016</p>
+                                                    </div>
+                                                </li>
+                                                <li class="timeline-item">
+                                                    <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                                            <h6>Junior Developer</h6>
+                                                            <span class="timeline-event-time me-1">(8 months)</span>
+                                                        </div>
+                                                        <p>Jan 2014 - Sep 2014</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </section>
+                <!-- Dashboard Ecommerce ends -->
+
+            </div>
+        </div>
+    <!-- END: Content-->
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUser" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
+            <div class="modal-content">
+                <div class="modal-header bg-transparent">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pb-5 px-sm-5 pt-50">
+                    <div class="text-center mb-2">
+                        <h1 class="mb-1">Edit Information</h1>
+                    </div>
+                    <EditForm Model="user" OnValidSubmit="EditUserProfile">
+                        <DataAnnotationsValidator />
+
+                        @if (!string.IsNullOrEmpty(successMessage))
+                        {
+                            <div class="alert alert-success text-center">
+                                @successMessage
+                            </div>
+                        }
+                         <div class="row gy-1 pt-75">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditTaxID">Employee ID</label>
+                                    <input type="text" id="modalEditTaxID" name="modalEditTaxID" class="form-control modal-edit-tax-id" value="@user.EmpId" disabled />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditUserStatus">Status</label>
+                                    <select id="modalEditUserStatus" name="modalEditUserStatus" class="form-select" @bind="user.Status" disabled="@isFormDisabled">
+                                        <option value="">Select Status</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">Inactive</option>
+                                        <option value="3">Suspended</option>
+                                    </select>
+                                    <ValidationMessage For="@(() => user.Status)" />
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label" for="modalEditUserFirstName">First Name</label>
+                                    <input type="text" id="modalEditUserFirstName" name="modalEditUserFirstName" class="form-control" @bind="user.Name" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.Name)" />
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label" for="modalEditUserMiddleName">Middle Name</label>
+                                    <input type="text" id="modalEditUserMiddleName" name="modalEditUserMiddleName" class="form-control" @bind="user.Name" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.Name)" />
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label" for="modalEditUserLastName">Last Name</label>
+                                    <input type="text" id="modalEditUserLastName" name="modalEditUserLastName" class="form-control" @bind="user.Name" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.Name)" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditRole">Designation</label>
+                                    <input type="text" id="modalEditRole" name="modalEditRole" class="form-control" @bind="user.Role" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.Role)" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditBloodGroup">Blood Group</label>
+                                    <input type="text" id="modalEditBloodGroup" name="modalEditBloodGroup" class="form-control" @bind="user.BloodGroup" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.BloodGroup)" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditUserEmail">Email</label>
+                                    <input type="email" id="modalEditUserEmail" name="modalEditUserEmail" class="form-control" @bind="user.Email" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.Email)" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditUserPhone">Contact</label>
+                                    <input type="text" id="modalEditUserPhone" name="modalEditUserPhone" class="form-control" @bind="user.Contact" disabled="@isFormDisabled" />
+                                    <ValidationMessage For="@(() => user.Contact)" />
+                                </div>
+                                <div class="col-12 text-center mt-2 pt-50">
+                                    <button type="submit" class="btn btn-primary me-1" disabled="@isFormDisabled">Submit</button>
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close" disabled="@isFormDisabled">
+                                        Discard
+                                    </button>
+                                </div>
+                            </div>
+                    </EditForm>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Edit User Modal -->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+</body>
+<!-- END: Body-->
+
+</html>
+
+@code {
+    private UserData user = new UserData();
+    private BankInformation bankInfo = new BankInformation();
+    private bool isLoading = true;
+    private bool isFormDisabled = false; // Flag to disable the form
+    private string successMessage = string.Empty; // Success message to show after update
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUserInformations();
+        await GetBankInformations();
+    }
+
+    private async Task GetUserInformations()
+    {
+        try
+        {
+            var token = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("User is not authenticated.");
+            }
+
+            // Use HttpClient for making requests
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "api/Users/GetLoggedInUser");
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await HttpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
+            {
+                user = await response.Content.ReadFromJsonAsync<UserData>();
+            }
+            else
+            {
+                // Log the error response or handle it accordingly
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {error}");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+
+    }
+
+    private async Task GetBankInformations()
+    {
+        try
+        {
+            var token = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("User is not authenticated.");
+            }
+
+            // Use HttpClient for making requests
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"api/BankInformation/GetBankInformations/{user.user_id}");
+requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await HttpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
+            {
+                bankInfo = await response.Content.ReadFromJsonAsync<BankInformation>();
+            }
+            else
+            {
+                bankInfo = await response.Content.ReadFromJsonAsync<BankInformation>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task EditUserProfile()
+    {
+        try
+        {
+            var token = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("User is not authenticated.");
+            }
+
+            // Assign a default value to EmergencyContact if it's not set
+            if (string.IsNullOrEmpty(user.EmergencyContact))
+            {
+                user.EmergencyContact = "N/A"; // or any default value that suits your case
+            }
+
+            // Serialize the user data to JSON
+            var jsonUserData = JsonSerializer.Serialize(user);
+
+            // Create the HttpRequestMessage
+            var requestMessage = new HttpRequestMessage(HttpMethod.Put, "api/Users/UpdateUserProfile")
+            {
+                Content = new StringContent(jsonUserData, Encoding.UTF8, "application/json")
+            };
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Send the request
+            var response = await HttpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
+            {
+                isFormDisabled = true; // Disable the form
+                successMessage = "Form updated successfully"; // Set success message
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error updating profile: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred: {ex.Message}");
+        }
+    }
+
+
+}
+

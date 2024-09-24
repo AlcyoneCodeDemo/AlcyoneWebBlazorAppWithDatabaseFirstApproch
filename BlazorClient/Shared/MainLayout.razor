@@ -1,0 +1,15 @@
+﻿@inherits LayoutComponentBase
+
+@inject NavigationManager NavigationManager
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+}
+
+<!-- Your custom layout HTML goes here -->
+<div class="your-custom-layout">
+    @Body
+</div>
